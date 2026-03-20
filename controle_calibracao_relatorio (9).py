@@ -5,7 +5,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Font
+from openpyxl.styles import Font, PatternFill
 
 
 NOME_ABA_PADRAO = "Cadastro"
@@ -109,6 +109,11 @@ def criar_planilha_resultado(registros, arquivo_saida):
     wb = Workbook()
     ws = wb.active
     ws.title = NOME_ABA_RESULTADO
+    preenchimento_vencido = PatternFill(
+        fill_type="solid",
+        start_color="FF0000",
+        end_color="FF0000",
+    )
 
     cabecalhos = [
         "Familia",
@@ -128,6 +133,8 @@ def criar_planilha_resultado(registros, arquivo_saida):
 
     for registro in registros:
         ws.append(registro)
+        if registro[-1] == "Vencido":
+            ws.cell(ws.max_row, 9).fill = preenchimento_vencido
 
     larguras = {
         "A": 16,
